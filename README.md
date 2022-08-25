@@ -15,6 +15,8 @@ The application is about Food Ordering, where the end-user search for a restaura
 | ------- | ----------|
 | pub/sub ( async communication) | :heavy_check_mark:  |
 | pub/sub routing  | :heavy_check_mark:  |
+| Retries, timeout, circuit breaker  | In_Progress  |
+| Rate limits  | In_Progress  |
 | Distributed Tracing   | :heavy_check_mark:  |
 | Metrics   | :heavy_check_mark:  |
 | State management  | :heavy_check_mark:  |
@@ -23,8 +25,6 @@ The application is about Food Ordering, where the end-user search for a restaura
 | Service to service Access control  | In_Progress  |
 | mTLS  | In_Progress   |
 | Oauth2.0  | In_Progress  |
-| Retries, timeout, circuit breaker  | In_Progress  |
-| Rate limits  | In_Progress  |
 | Central logging  | In_Progress  |
 | Distributed locking  | In_Progress  |
 

@@ -39,27 +39,29 @@ Make sure ‘Dapr’ is installed on your machine. Run the following command to 
 ### Order Service
 
 ```sh
-> dapr run --app-id order-service --components-path ../dapr-component --app-port 8080 --dapr-http-port 3500 mvn spring-boot:run
+dapr run --app-id order-service --components-path ../dapr-component --app-port 8080 --dapr-http-port 3500 mvn spring-boot:run
 ```
 ### Restaurant Service
 
 ```sh
-> dapr run --app-id restaurant-service --components-path ../dapr-component --app-port 8081 --dapr-http-port 3501 mvn spring-boot:run
+dapr run --app-id restaurant-service --components-path ../dapr-component --app-port 8081 --dapr-http-port 3501 mvn spring-boot:run
 ```
 
 ### Rating Service
 
 ```sh
-> npm install
-
-> dapr run --app-id rating-service --components-path ../dapr-component --app-port 8083 --dapr-http-port 3503 node app.js
+npm install
+```
+```sh
+dapr run --app-id rating-service --components-path ../dapr-component --app-port 8083 --dapr-http-port 3503 node app.js
 ```
 
 ### Point Service
 
 ```sh
-> pip install -r requirements.txt
-
+pip install -r requirements.txt
+```
+```sh
 > dapr run --app-id point-service --components-path ../dapr-component --app-port 8084 --dapr-http-port 3504 python app.py
 ```
 

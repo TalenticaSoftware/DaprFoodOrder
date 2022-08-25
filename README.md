@@ -15,3 +15,66 @@ The application is about Food Ordering, where the end-user search for a restaura
 | ------- | ----------|
 | pub/sub ( async communication) | :heavy_check_mark:  |
 | pub/sub routing  | :heavy_check_mark:  |
+| Distributed Tracing   | :heavy_check_mark:  |
+| Metrics   | :heavy_check_mark:  |
+| State management  | :heavy_check_mark:  |
+| Secret management  | :heavy_check_mark:  |
+| Multiple programing languages  | :heavy_check_mark:  |
+| Service to service Access control  | In_Progress  |
+| mTLS  | In_Progress   |
+| Oauth2.0  | In_Progress  |
+| Retries, timeout, circuit breaker  | In_Progress  |
+| Rate limits  | In_Progress  |
+| Central logging  | In_Progress  |
+| Distributed locking  | In_Progress  |
+
+> Note: This is not an exhaustive list but the top concerns that I had implemented in various applications I worked on. As you can see these have nothing to do with the business domain for which we are building the application. These are the concern due to micro-service architecture. 
+
+
+## Start the application
+Make sure ‘Dapr’ is installed on your machine. Run the following command to initialize Dapr (if not already initialized) 
+```sh
+ > dapr init 
+```
+### Order Service
+
+```sh
+> dapr run --app-id order-service --components-path ../dapr-component --app-port 8080 --dapr-http-port 3500 mvn spring-boot:run
+```
+### Restaurant Service
+
+```sh
+> dapr run --app-id restaurant-service --components-path ../dapr-component --app-port 8081 --dapr-http-port 3501 mvn spring-boot:run
+```
+
+### Rating Service
+
+```sh
+> npm install
+
+> dapr run --app-id rating-service --components-path ../dapr-component --app-port 8083 --dapr-http-port 3503 node app.js
+```
+
+### Point Service
+
+```sh
+> pip install -r requirements.txt
+
+> dapr run --app-id point-service --components-path ../dapr-component --app-port 8084 --dapr-http-port 3504 python app.py
+```
+
+## Pub-Sub & routing 
+
+Order service and Point service are communicating asynchronously with each other via the pub/sub model. When an order is created inside the order service, the order service raises an event ‘Order Created' and publishes it to a channel. Point service has subscribed to the channel and receives a notification via HTTP post method by side card and adds points accordingly. When the order is canceled by the user, the Order service raises an event ‘Order Cancelled’. Point service has also subscribed to this event but this event is routed differently from ‘Order created’ The following relevant code highlights how this is achieved by configuration in Dapr and the required code to write in the application. 
+
+## Distributed Tracing
+
+When a user places an order, the order is received by Order Service. Order service first coordinates with Restaurant Service via sync API call to verify if the restaurant is correct and if the restaurant is in working hours. Internally, restaurant service communicates with ‘Rating Service’ to get the rating of the restaurant. Once the order is persistent, the order service raises an event ‘OrderCreated’ to which Point service has subscribed and adds points according. The following screenshot shows how this whole interaction is captured by Dapr in ‘Jager’ without writing a single line of code. 
+
+## State Management
+
+To demonstrate state management capability, there is order cancellation functionality. The requirement is such that when a user places an order he/she is allowed to cancel the order only within 10 mins. To implement this we will store the orderId in a state store with a TTL of 10 mins. When a user initiates a cancellation we check the state store and see if the orderId exists or not if it exists we allow the user to cancel the order else we throw an exception. 
+
+## Secret
+
+When our application receives an order, we need to inform the restaurant about start preparing the food. There could be multiple types of integration but we have assumed an API call to Restaurant’s existing application. To make an external API call generally, we need some sort of API key or Basic Authentication (username/password). To demonstrate a secret component of Dapr we first obtain an API key from a secret store and then make an external API call.

@@ -1,0 +1,22 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: sentinel
+spec:
+  type: middleware.http.sentinel
+  version: v1
+  metadata:
+  - name: appName
+    value: "order-service"
+  - name: logDir
+    value: "/var/tmp"
+  - name: flowRules
+    value: >-
+      [
+        {
+          "resource": "POST:/v1.0/invoke/order-service/method/v1/order/",
+          "threshold": 1,
+          "tokenCalculateStrategy": 0,
+          "controlBehavior": 0
+        }
+      ]      

@@ -98,6 +98,11 @@ cd docker-compose
 docker-compose up -d
 ```
 
+Hit get order api using dapr method
+
+```sh
+http://localhost:3500/v1.0/invoke/order-service/method/v1/order
+```
 
 The user will be presented with a login page if a user is not already logged in. Once logged-in Dapr side card exchange 'code' with 'access token' and pass the access token in header 'authorization' which our application can use for authorization. In our application we are just printing the access token as shown below : 
 
@@ -108,3 +113,7 @@ The user will be presented with a login page if a user is not already logged in.
     return orderService.getOrder(orderId);
   }
 ```
+
+## Rate limit
+
+Just start order service with configuration having rate limit defined. I have define 2 request per sec. If client tries to call order service with more that 2 rps it will get '429 too many request' error. Better to use sentinel middle where you can configure rate limit per url basis.

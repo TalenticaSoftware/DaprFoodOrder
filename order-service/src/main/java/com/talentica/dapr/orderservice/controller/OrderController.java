@@ -25,7 +25,8 @@ public class OrderController {
   }
 
   @GetMapping("/{orderId}")
-  Order getOrder(@PathVariable("orderId") String orderId){
+  Order getOrder(@PathVariable("orderId") String orderId, @RequestHeader(value = "authorization", required = false) String accessToken) {
+    log.info(String.format("access token is %s", accessToken));
     return orderService.getOrder(orderId);
   }
 }

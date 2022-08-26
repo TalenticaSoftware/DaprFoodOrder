@@ -1,0 +1,23 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: oauth2
+  namespace: default
+spec:
+  type: middleware.http.oauth2
+  version: v1
+  metadata:
+  - name: clientId
+    value: "order-service-client"
+  - name: clientSecret
+    value: "bf7e77ce-8514-4385-a49b-5bfd16b5dbda"
+  - name: scopes
+    value: ""
+  - name: authURL
+    value: "http://localhost:8043/auth/realms/master/protocol/openid-connect/auth"
+  - name: tokenURL
+    value: "http://localhost:8043/auth/realms/master/protocol/openid-connect/token"
+  - name: redirectURL
+    value: "http://localhost:3500"
+  - name: authHeaderName
+    value: "authorization"

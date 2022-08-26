@@ -24,7 +24,7 @@ The application is about Food Ordering, where the end-user search for a restaura
 | Multiple programing languages  | :heavy_check_mark:  |
 | Service to service Access control  | In_Progress  |
 | mTLS  | In_Progress   |
-| Oauth2.0  | In_Progress  |
+| Oauth2.0  | :heavy_check_mark:  |
 | Central logging  | In_Progress  |
 | Distributed locking  | In_Progress  |
 
@@ -52,6 +52,7 @@ dapr run --app-id restaurant-service --components-path ../dapr-component --app-p
 ```sh
 npm install
 ```
+
 ```sh
 dapr run --app-id rating-service --components-path ../dapr-component --app-port 8083 --dapr-http-port 3503 node app.js
 ```
@@ -61,8 +62,9 @@ dapr run --app-id rating-service --components-path ../dapr-component --app-port 
 ```sh
 pip install -r requirements.txt
 ```
+
 ```sh
-> dapr run --app-id point-service --components-path ../dapr-component --app-port 8084 --dapr-http-port 3504 python app.py
+dapr run --app-id point-service --components-path ../dapr-component --app-port 8084 --dapr-http-port 3504 python app.py
 ```
 
 ## Pub-Sub & routing 
@@ -80,3 +82,29 @@ To demonstrate state management capability, there is order cancellation function
 ## Secret
 
 When our application receives an order, we need to inform the restaurant about start preparing the food. There could be multiple types of integration but we have assumed an API call to Restaurant’s existing application. To make an external API call generally, we need some sort of API key or Basic Authentication (username/password). To demonstrate a secret component of Dapr we first obtain an API key from a secret store and then make an external API call.
+
+## Oauth2.0 Authorization Code
+
+Here, I have assumed there is a web application which is maintaining the session and dealing with web pages. When an unauthorized user tries to place an order it should be presented with a login page. Only upon valid login, user should be able to place an order. To achieve this I have used Keycloak as an authorization server and Oauth2.0 Authorization code flow to authenticate the user. First, you need to start 'order-service' with the additional command line parameter '-c' which tells dapr to use OAuth middleware as shown below
+
+```sh
+dapr run --app-id order-service --components-path ../dapr-component -c ../dapr-component/config.yml --app-port 8080 --dapr-http-port 3500 mvn spring-boot:run
+```
+
+Start the keycloak authorization server and import the 'realm-export.json' into keycloak
+
+```sh
+cd docker-compose
+docker-compose up -d
+```
+
+
+The user will be presented with a login page if a user is not already logged in. Once logged-in Dapr side card exchange 'code' with 'access token' and pass the access token in header 'authorization' which our application can use for authorization. In our application we are just printing the access token as shown below : 
+
+```java 
+  @GetMapping("/{orderId}")
+  Order getOrder(@PathVariable("orderId") String orderId, @RequestHeader(value = "authorization", required = false) String accessToken) {
+    log.info(String.format("access token is %s", accessToken));
+    return orderService.getOrder(orderId);
+  }
+```

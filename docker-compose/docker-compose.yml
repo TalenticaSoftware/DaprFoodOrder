@@ -1,12 +1,10 @@
 version: "3"
 services:
   
-  db :
-    image : postgres:11.7
-    ports : 
-      - "5432:5432"
+  keycloak :
+    image : jboss/keycloak:9.0.2
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=pms
-    volumes:
-      - ./db/export:/db/export
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    ports:
+      - "8043:8080"

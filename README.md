@@ -75,7 +75,9 @@ Order service and Point service are communicating asynchronously with each other
 
 ## Distributed Tracing
 
-When a user places an order, the order is received by Order Service. Order service first coordinates with Restaurant Service via sync API call to verify if the restaurant is correct and if the restaurant is in working hours. Internally, restaurant service communicates with ‘Rating Service’ to get the rating of the restaurant. Once the order is persistent, the order service raises an event ‘OrderCreated’ to which Point service has subscribed and adds points according. The following screenshot shows how this whole interaction is captured by Dapr in ‘Jager’ without writing a single line of code. 
+When a user places an order, the order is received by Order Service. Order service first coordinates with Restaurant Service via sync API call to verify if the restaurant is correct and if the restaurant is in working hours. Internally, restaurant service communicates with ‘Rating Service’ to get the rating of the restaurant. Once the order is persistent, the order service raises an event ‘OrderCreated’ to which Point service has subscribed and adds points according. Restaurant service has also subscribed to the same event 'OrderCreated' to place an order to an external system. The following screenshot shows how this whole interaction is captured by Dapr in ‘Jager’ without writing a single line of code. Notice '2' on the line from 'order-service' to 'restaurant-service' this represents 'order-service' calling 'restaurant-service' two times, one is a sync call to verify the restaurant, and the other is due to pub/sub subscription 
+
+![Alt text](/images/distributed_tracing.PNG?raw=true "Title")
 
 ## State Management
 

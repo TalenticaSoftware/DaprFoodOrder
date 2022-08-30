@@ -16,7 +16,7 @@ The application is about Food Ordering, where the end-user search for a restaura
 | pub/sub ( async communication) | :heavy_check_mark:  |
 | pub/sub routing  | :heavy_check_mark:  |
 | Retries, timeout, circuit breaker  | In_Progress  |
-| Rate limits  | In_Progress  |
+| Rate limits  | :heavy_check_mark:  |
 | Distributed Tracing   | :heavy_check_mark:  |
 | Metrics   | :heavy_check_mark:  |
 | State management  | :heavy_check_mark:  |
@@ -34,7 +34,7 @@ The application is about Food Ordering, where the end-user search for a restaura
 ## Start the application
 Make sure ‘Dapr’ is installed on your machine. Run the following command to initialize Dapr (if not already initialized) 
 ```sh
- > dapr init 
+dapr init 
 ```
 ### Order Service
 
@@ -88,7 +88,7 @@ When our application receives an order, we need to inform the restaurant about s
 Here, I have assumed there is a web application which is maintaining the session and dealing with web pages. When an unauthorized user tries to place an order it should be presented with a login page. Only upon valid login, user should be able to place an order. To achieve this I have used Keycloak as an authorization server and Oauth2.0 Authorization code flow to authenticate the user. First, you need to start 'order-service' with the additional command line parameter '-c' which tells dapr to use OAuth middleware as shown below
 
 ```sh
-dapr run --app-id order-service --components-path ../dapr-component -c ../dapr-component/config.yml --app-port 8080 --dapr-http-port 3500 mvn spring-boot:run
+dapr run --app-id order-service --components-path ../dapr-component -c ../dapr-component/config-oauth.yml --app-port 8080 --dapr-http-port 3500 mvn spring-boot:run
 ```
 
 Start the keycloak authorization server and import the 'realm-export.json' into keycloak
@@ -116,4 +116,8 @@ The user will be presented with a login page if a user is not already logged in.
 
 ## Rate limit
 
-Just start order service with configuration having rate limit defined. I have define 2 request per sec. If client tries to call order service with more that 2 rps it will get '429 too many request' error. Better to use sentinel middle where you can configure rate limit per url basis.
+Just start order service with configuration having rate limit defined as shown below. I have define 2 request per sec as a limit. If client tries to call order service with more that 2 rps it will get '429 too many request' error. This is a very basic way of enabling rating limits. If the requirement is to use a more sophisticated rate limit better use sentinel middle where you can configure the rate limit per URL basis.
+
+```sh
+dapr run --app-id order-service --components-path ../dapr-component -c ../dapr-component/config-ratelimit.yml --app-port 8080 --dapr-http-port 3500 mvn spring-boot:run
+```

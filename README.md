@@ -81,6 +81,8 @@ When a user places an order, the order is received by Order Service. Order servi
 
 ## State Management
 
+![Alt text](/images/order_cancel_ttl.PNG?raw=true "Title")
+
 To demonstrate state management capability, there is order cancellation functionality. The requirement is such that when a user places an order he/she is allowed to cancel the order only within 10 mins. To implement this we will store the orderId in a state store with a TTL of 10 mins. When a user initiates a cancellation we check the state store and see if the orderId exists or not if it exists we allow the user to cancel the order else we throw an exception. 
 
 ## Secret

@@ -69,6 +69,8 @@ dapr run --app-id point-service --components-path ../dapr-component --app-port 8
 
 ## Pub-Sub & routing 
 
+![Alt text](/images/pub_sub_routing.PNG?raw=true "Title")
+
 Order service and Point service are communicating asynchronously with each other via the pub/sub model. When an order is created inside the order service, the order service raises an event ‘Order Created' and publishes it to a channel. Point service has subscribed to the channel and receives a notification via HTTP post method by side card and adds points accordingly. When the order is canceled by the user, the Order service raises an event ‘Order Cancelled’. Point service has also subscribed to this event but this event is routed differently from ‘Order created’ The following relevant code highlights how this is achieved by configuration in Dapr and the required code to write in the application. 
 
 ## Distributed Tracing

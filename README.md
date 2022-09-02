@@ -69,9 +69,9 @@ dapr run --app-id point-service --components-path ../dapr-component --app-port 8
 
 ## Pub-Sub & routing 
 
-![Alt text](/images/pub_sub_routing.PNG?raw=true "Title")
-
 Order service and Point service are communicating asynchronously with each other via the pub/sub model. When an order is created inside the order service, the order service raises an event ‘Order Created' and publishes it to a channel. Point service has subscribed to the channel and receives a notification via HTTP post method by side card and adds points accordingly. When the order is canceled by the user, the Order service raises an event ‘Order Cancelled’. Point service has also subscribed to this event but this event is routed differently from ‘Order created’ The following relevant code highlights how this is achieved by configuration in Dapr and the required code to write in the application. 
+
+![Alt text](/images/pub_sub_routing.PNG?raw=true "Title")
 
 ## Distributed Tracing
 
@@ -81,9 +81,8 @@ When a user places an order, the order is received by Order Service. Order servi
 
 ## State Management
 
-![Alt text](/images/order_cancel_ttl.PNG?raw=true "Title")
-
 To demonstrate state management capability, there is order cancellation functionality. The requirement is such that when a user places an order he/she is allowed to cancel the order only within 10 mins. To implement this we will store the orderId in a state store with a TTL of 10 mins. When a user initiates a cancellation we check the state store and see if the orderId exists or not if it exists we allow the user to cancel the order else we throw an exception. 
+![Alt text](/images/order_cancel_ttl.PNG?raw=true "Title")
 
 ## Secret
 

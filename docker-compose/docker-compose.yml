@@ -8,3 +8,14 @@ services:
       - KEYCLOAK_PASSWORD=admin
     ports:
       - "8043:8080"
+      
+  queue:
+    image : rabbitmq:3.7-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=test
+      - RABBITMQ_DEFAULT_PASS=test
+      - ERLANG_COOKIE=abcdefg
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "61613:61613"

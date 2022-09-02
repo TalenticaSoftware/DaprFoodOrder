@@ -15,6 +15,7 @@ The application is about Food Ordering, where the end-user search for a restaura
 | ------- | ----------|
 | pub/sub ( async communication) | :heavy_check_mark:  |
 | pub/sub routing  | :heavy_check_mark:  |
+| Service discovery  | :heavy_check_mark:  |
 | Retries, timeout, circuit breaker  | In_Progress  |
 | Rate limits  | :heavy_check_mark:  |
 | Distributed Tracing   | :heavy_check_mark:  |
